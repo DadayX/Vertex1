@@ -14,17 +14,8 @@ import java.net.URL;
 public class Main {
     public static void main(String[] args) {
         System.out.println("App....");
-        final String endpoint="http://localhost:8080/SessionWS/SessionWS?WSDL";
-        final URL url;
-        try {
-            url = URI.create(endpoint).toURL();
-            final SessionWS_Service service=new SessionWS_Service(url);
-            System.out.println(service.getSessionWSPort().createSession());
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-
-        //final Vertx vertx=Vertx.vertx();
-        //vertx.deployVerticle(new SessionVerticle());
+        
+        final Vertx vertx=Vertx.vertx();
+        vertx.deployVerticle(new SessionVerticle());
     }
 }

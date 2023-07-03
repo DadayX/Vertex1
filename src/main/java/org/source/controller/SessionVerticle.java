@@ -12,15 +12,18 @@ import org.source.service.SessionService;
 
 public class SessionVerticle extends AbstractVerticle {
     private static final Logger LOGGER=LoggerFactory.getLogger(SessionVerticle.class);
+    private SessionService s;
+    private String sessionID;
     @Override
     public void start() throws Exception{
+        this.s=new SessionService();
         LOGGER.info("Ato @start izao");
 
         //Create router
         Router router=Router.router(vertx);
 
         //Assing Controller function
-        router.get("/api/v1/session").handler(this::getSession);
+        router.post("/api/v1/injection").handler(this::runInjection);
 
         //Router handler
         vertx.createHttpServer().requestHandler(router).listen(8000);
@@ -29,9 +32,9 @@ public class SessionVerticle extends AbstractVerticle {
     public void stop() throws Exception{
         LOGGER.info("Ato @stop izao");
     }
-    private void getSession(RoutingContext routingContext){
+    private void runInjection(RoutingContext routingContext){
         LOGGER.info("Check session....");
-        SessionService s=new SessionService();
+        this.sessionID=s.getSessionId();
         final JsonObject jsonResponse=new JsonObject();
         jsonResponse.put("sessionid",s.getSessionId());
         routingContext.response()
